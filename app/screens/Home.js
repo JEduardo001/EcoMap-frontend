@@ -4,6 +4,7 @@ import MapView, { Marker, Callout } from "react-native-maps"
 import {image} from "../../assets/markerPinkMedium.png"
 import { MaterialIcons } from '@expo/vector-icons';
 import {animals} from "../constants/Animals.js"
+
 /* que es IA aplicada + cloud */
 export const Home = () => {
   const [sizeMarker, setSizeMarker] = useState()
