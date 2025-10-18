@@ -6,7 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
 import {StatusBar} from "react-native"
 import {Home} from "./app/screens/Home.js"
 import {DetailsAnimals} from "./app/screens/DetailsAnimals.js"
-import {TestFirebase} from "./app/screens/TestFirebase.js"
+import {CreateMark} from "././app/screens/CreateMark.js"
+import {Species} from "./app/screens/Species.js"
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,12 +31,20 @@ const Tabs = () => {
           title: "Detalles Animales"
         }}
       />
-      <Tab.Screen name="TestFirebase" component={TestFirebase} 
+      <Tab.Screen name="CreateMark" component={CreateMark} 
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="alert-circle-outline" color={color} size={size} />
           ),
-          title: "Test"
+          title: "Crear Marcador"
+        }}
+      />
+       <Tab.Screen name="Species" component={Species} 
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="alert-circle-outline" color={color} size={size} />
+          ),
+          title: "Conoce las Especies"
         }}
       />
     </Tab.Navigator>
