@@ -14,6 +14,8 @@ export const CreateMark = () => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("fauna");
   const [image, setImage] = useState(null);
+  const [imageObject, setImageObject] = useState(null);
+
   const [latitude, setLatitude] = useState(24.14231);
   const [longitude, setLongitude] = useState(-110.31316);
 
@@ -23,6 +25,7 @@ export const CreateMark = () => {
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
     if (status !== 'granted') {
       setModalTitle("Permisos requeridos");
       setModalMessage("Se necesitan permisos para acceder a la galería");
@@ -30,12 +33,18 @@ export const CreateMark = () => {
       return;
     }
 
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 0.7,
     });
 
-    if (!result.canceled) setImage(result.assets[0].uri);
+    if (!result.canceled) {
+      const image = result.assets[0];
+
+      setImage(image.uri);
+
+      setImageObject(image);
+    }
   };
 
   const visibleModal = (title, message) => {
@@ -50,15 +59,8 @@ export const CreateMark = () => {
       visibleModal("Error", "Todos los campos son obligatorios");
       return;
     }
-
-    const reponseSubmitImage = await submitImage(image)
-    if(reponseSubmitImage.status != 200){
-      visibleModal("Ocurrió un problema", "No se pudo subir la imagen, intenta nuevamente");
-      return
-    }
-    const imageUrl = reponseSubmitImage.data;
-    console.log("Image URL:", imageUrl);
-    const newMark = { name, description, category, imageUrl, latitude, longitude };
+    
+    const newMark = { name, description, category, imageObject, latitude, longitude };
     const responseSumitMarket = await submitNewMarket(newMark)
     if(responseSumitMarket.status != 200){
       visibleModal("Ocurrió un problema", "No se pudo agregar el animal, intenta nuevamente");
@@ -119,8 +121,8 @@ export const CreateMark = () => {
             onValueChange={(itemValue) => setCategory(itemValue)}
             style={styles.picker}
           >
-            <Picker.Item label="Fauna" value="fauna" />
-            <Picker.Item label="Flora" value="flora" />
+            <Picker.Item label="Fauna" value="VX8DsEiLXS1AtX6wpgkw" />
+            <Picker.Item label="Flora" value="2mvFSZ9mN0vzy4BrRgkT" />
           </Picker>
         </View>
 

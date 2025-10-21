@@ -1,4 +1,4 @@
-const apiUrl = "http://192.168.1.9:3000"
+const apiUrl = "http://192.168.20.119:3000"
 
 export const fetchMarkers = async () => {
     try{
@@ -99,21 +99,37 @@ export const submitImage = async (imageUri) => {
 
 
 export const submitNewMarket = async (dataMarket) => {
-    try{
-        const response = await fetch(apiUrl + "/market/createMarket", {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataMarket)
-        })
+  try {
+    const formData = new FormData();
 
-        if(!response.ok){
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json()
-        return data
-    }catch(error){
-        console.error("Error submit new market:", error);
+    // Agregar campos de texto
+    formData.append('name', dataMarket.name);
+    formData.append('description', dataMarket.description);
+    formData.append('category', dataMarket.category);
+    formData.append('latitude', String(dataMarket.latitude));
+    formData.append('longitude', String(dataMarket.longitude));
+
+    // Agregar imagen
+    const image = dataMarket.imageObject;
+    formData.append('image', {
+      uri: image.uri,
+      name: image.fileName || 'photo.jpg',
+      type: image.type || 'image/jpeg',
+    });
+
+    const response = await fetch(apiUrl + "/markers/createMarket", {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-}
+
+    const data = await response.json();
+    return { status: response.status, data };
+  } catch (error) {
+    console.error("Error submit new market:", error);
+    return { status: 500, error: error.message };
+  }
+};

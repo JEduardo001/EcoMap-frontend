@@ -1,4 +1,3 @@
-
 export const filters = [
     {
         "id": "2mvFSZ9mN0vzy4BrRgkT",
