@@ -16,13 +16,15 @@ export const CreateMark = () => {
   const [category, setCategory] = useState(filters[0].id);
   const [image, setImage] = useState(null);
   const [imageObject, setImageObject] = useState(null);
-
+  const [sendingCreateMark, setSendingCreateMark] = useState(false)
   const [latitude, setLatitude] = useState(24.14231);
   const [longitude, setLongitude] = useState(-110.31316);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [modalTitle, setModalTitle] = useState("");
+  const [listCuriousThings,setListCuriousThings] = useState([])
+  const [curiousThing,setCuriousThing] = useState(null)
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -48,6 +50,21 @@ export const CreateMark = () => {
     }
   };
 
+  const addCuriousThings = () => {
+    if (curiousThing) {
+      setListCuriousThings([...listCuriousThings, curiousThing]);
+      setCuriousThing(null);
+    }
+  };
+
+
+  const deleteCuriousThings = (index) => {
+    const updatedList = [...listCuriousThings];
+    updatedList.splice(index, 1);
+    setListCuriousThings(updatedList);
+  };
+
+
   const visibleModal = (title, message) => {
       setModalTitle(title);
       setModalMessage(message);
@@ -55,13 +72,16 @@ export const CreateMark = () => {
   }
 
   const handleSubmit = async () => {
-
-    if (!name || !description || !latitude || !longitude || !imageObject) {
+    if(sendingCreateMark){
+      return
+    }
+    setSendingCreateMark(true)
+    if (!name || !description || !latitude || !longitude) {
       visibleModal("Falta información", "Porfavor completa todos los campos requeridos");
       return;
     }
     
-    const newMark = { name, description, category, imageObject, latitude, longitude };
+    const newMark = { name, description, category, imageObject, latitude, longitude, listCuriousThings };
     const responseSumitMarket = await submitNewMarket(newMark)
     if(responseSumitMarket.status != 200){
       visibleModal("Ocurrió un problema", "No se pudo agregar el animal, intenta nuevamente");
@@ -69,6 +89,7 @@ export const CreateMark = () => {
     }
 
     visibleModal("Éxito", "Animal agregado correctamente");
+    setSendingCreateMark(false)
     resetForm()
   };
 
@@ -79,6 +100,7 @@ export const CreateMark = () => {
     setImage(null); 
     setLatitude(24.14231); 
     setLongitude(-110.31316);
+    setListCuriousThings([])
   }
 
   return (
@@ -88,7 +110,6 @@ export const CreateMark = () => {
         <Text style={styles.header}>Agregar Nuevo Animal</Text>
 
         <Text style={styles.label}>Imagen</Text>
-        <Text style={[styles.label, {color: "red", fontSize: 12}]}>Requerido</Text>
         <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
           {image ? (
             <Image source={{ uri: image }} style={styles.previewImage} />
@@ -117,6 +138,41 @@ export const CreateMark = () => {
           value={description}
           onChangeText={setDescription}
         />
+
+        <Text style={styles.label}>Lista de datos curiosos</Text>
+        <View style={{ flexDirection: "row",  width: "100%", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <TextInput
+          style={[styles.inputCuriosDetails, { height: 100, textAlignVertical: 'top', flex: 1, marginRight: 10 }]}
+          placeholder="Algún dato curioso"
+          placeholderTextColor="#666"
+          multiline
+          value={curiousThing}
+          onChangeText={setCuriousThing}
+        />
+
+          <TouchableOpacity style={styles.btnAddCouriousThing} onPress={addCuriousThings}>
+            <Text style={styles.submitText}>Añadir</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.label}>Elementos</Text>
+        <View style={styles.pickerContainer}>
+          {
+          listCuriousThings.length == 0
+          ?  <Text style={styles.label}>Sin elementos</Text>
+          :
+            listCuriousThings.map((el,index) => {
+              return (
+                <View key={index} style = {{borderRadius: 10, padding: 7, flexDirection: "row", width: "70%", justifyContent: "space-between"}}>
+                  <Text style={styles.label}>{el}</Text>
+                  <TouchableOpacity style={styles.btnDeleteCouriousThing} onPress={() => deleteCuriousThings(index)}>
+                    <Text style={[styles.submitText, {fontSize: 13}]}>Eliminar</Text>
+                  </TouchableOpacity>
+                </View>
+              )
+            })
+        }
+        </View>
 
         <Text style={styles.label}>Categoría</Text>
         <Text style={[styles.label, {color: "red", fontSize: 12}]}>Requerido</Text>
@@ -172,28 +228,31 @@ export const CreateMark = () => {
           />
         </View>
 
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitText}>Agregar Animal</Text>
+        <TouchableOpacity style={[styles.submitButton, sendingCreateMark ? {backgroundColor: "#5d5e5dff",} : {backgroundColor: "#4CAF50",}]} onPress={handleSubmit}>
+          <Text style={styles.submitText}>
+            {
+              sendingCreateMark ? "Enviando..." : "Agregar Animal"
+            }
+          </Text>
         </TouchableOpacity>
       </ScrollView>
 
      <Modal
-  visible={modalVisible}
-  transparent
-  animationType="fade"
-  onRequestClose={() => setModalVisible(false)}
->
-  <View style={styles.modalBackground}>
-    <View style={[styles.modalContainer, modalTitle === "Éxito" ? styles.successModal : styles.errorModal]}>
-      <Text style={styles.modalTitle}>{modalTitle}</Text>
-      <Text style={styles.modalMessage}>{modalMessage}</Text>
-      <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
-        <Text style={styles.modalButtonText}>Cerrar</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-</Modal>
-
+        visible={modalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={[styles.modalContainer, modalTitle === "Éxito" ? styles.successModal : styles.errorModal]}>
+            <Text style={styles.modalTitle}>{modalTitle}</Text>
+            <Text style={styles.modalMessage}>{modalMessage}</Text>
+            <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.modalButtonText}>Cerrar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -205,6 +264,7 @@ const styles = StyleSheet.create({
   label: { fontSize: 16, fontWeight: "600", color: "#555", marginBottom: 6, marginTop: 12 },
   tooltip: { color: "#4CAF50", marginBottom: 8, fontSize: 14 },
   input: { backgroundColor: "#fff", color: "#333", padding: 12, borderRadius: 12, fontSize: 16, borderWidth: 1, borderColor: "#ddd", marginBottom: 8 },
+  inputCuriosDetails: { backgroundColor: "#fff", color: "#333", padding: 12, borderRadius: 12, fontSize: 16, borderWidth: 1, borderColor: "#ddd", marginBottom: 8 },
   pickerContainer: { backgroundColor: "#fff", borderRadius: 12, borderWidth: 1, borderColor: "#ddd", marginBottom: 8 },
   picker: { color: "#333" },
   imagePicker: { backgroundColor: "#e0e0e0", height: 200, borderRadius: 16, justifyContent: "center", alignItems: "center", marginTop: 6, marginBottom: 8 },
@@ -213,7 +273,9 @@ const styles = StyleSheet.create({
   map: { width: "100%", height: 300, borderRadius: 16, marginBottom: 10 },
   coordinates: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
   inputCoord: { backgroundColor: '#fff', color: '#333', padding: 10, borderRadius: 12, borderWidth: 1, borderColor: '#ddd', width: '48%', textAlign: 'center' },
-  submitButton: { backgroundColor: "#4CAF50", paddingVertical: 15, borderRadius: 16, marginTop: 15, alignItems: "center" },
+  submitButton: {  paddingVertical: 15, borderRadius: 16, marginTop: 15, alignItems: "center" },
+  btnAddCouriousThing: { backgroundColor: "#4CAF50", padding: 11, borderRadius: 16,  alignItems: "center" },
+  btnDeleteCouriousThing:  { backgroundColor: "#cf5555ff", height: 38, padding: 11, borderRadius: 16,  alignItems: "center" },
   submitText: { color: "#fff", fontSize: 18, fontWeight: "700" },
  modalBackground: {
   flex: 1,

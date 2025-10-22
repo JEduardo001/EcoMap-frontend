@@ -15,7 +15,7 @@ export const Home = () => {
   const [markers,setMarkers] = useState([])
   const [filter,setFilter] = useState(null)
   const navigation = useNavigation();
-  
+
   
  const navigateToDetailsAnimal = () => {
   console.log("Navigating to DetailsAnimal for:", selectedAnimal);
@@ -85,10 +85,19 @@ export const Home = () => {
           coordinate={marker.coordinate}
           onPress={() => handleMarkerPress(marker.animal)}
         >
-          <Image
-            source={{ uri: marker.animal.urlImage }} 
-            style={{ width: 50 , height: 50  }}
-          />
+          {
+            marker.animal.urlImage === "" || marker.animal.urlImage == null 
+            ?
+             <Image
+              source={require('../../assets/imageNotFound.jpg')}
+              style={{ width: 50 , height: 50  }}
+            />
+            :
+            <Image
+              source={{ uri: marker.animal.urlImage }} 
+              style={{ width: 50 , height: 50  }}
+            />
+          }
         </Marker>
         ))}
       </MapView>
@@ -147,11 +156,20 @@ export const Home = () => {
             </View>
 
             <View style={styles.imageContainer}>
-              <Image
-                source={require('../../assets/ballenaJorobada.png')}
-                style={styles.animalImage}
-                resizeMode="stretch"
-              />
+                {
+                  selectedAnimal != null
+                  ?
+                    <Image
+                      source={
+                        selectedAnimal.urlImage === "" || selectedAnimal.urlImage == null
+                          ? require('../../assets/imageNotFound.jpg')
+                          : { uri: selectedAnimal.urlImage }
+                      }
+                      style={styles.animalImage}
+                      
+                    />
+                  : null
+                }
             </View>
 
             <View style={styles.infoContainer}>
@@ -306,8 +324,8 @@ btnGoToDetailsAnimalText: {
     alignItems: 'center',
   },
   animalImage: {
-    width: 350,
-    height: 350,
+    width: "100%",
+    height: "100%",
     borderRadius: 10,
   
   },

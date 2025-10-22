@@ -55,16 +55,21 @@ export const Species = () => {
     }
     setSpecies(response.data)
   }
-  //source={require('../../assets/turtle.png')}
+
+  //source={require('../ ../assets/turtle.png')}
   const renderCard = ({ item }) => (
   <TouchableOpacity style={styles.card} onPress={() => navigateToDetailsAnimal(item)}>
-    <ImageBackground 
-      source={{ uri: item.urlImage }} 
+    <ImageBackground
+      source={
+        item.urlImage === "" || item.urlImage == null
+          ? require('../../assets/imageNotFound.jpg')
+          : { uri: item.urlImage }
+      }
       style={styles.backgroundImageCard}
       resizeMode="cover"
-    >   
+    >
       <View style={styles.overlay} />
-    {/* 
+       {/* 
   <Image source={{ uri: item.urlImage }} style={styles.image} /> 
   */}
       <View style={styles.infoContainer}>
@@ -73,6 +78,7 @@ export const Species = () => {
         <MaterialIcons name="info-outline" size={24} color="#4CAF50" />
       </View>
     </ImageBackground>
+
   </TouchableOpacity>
 );
 
@@ -92,7 +98,7 @@ export const Species = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ alignItems: 'center', paddingHorizontal: 10 }}
-        style={{ maxHeight: 100 }}
+        style={{ maxHeight: 100, padding: 7 }}
         >
         <TouchableOpacity
             style={styles.containerSectionInfo}
@@ -123,6 +129,7 @@ export const Species = () => {
                 </View>
             :
              <FlatList
+                style={{marginTop: 30}}
                 data={species}
                 renderItem={renderCard}
                 keyExtractor={(item) => item.id}

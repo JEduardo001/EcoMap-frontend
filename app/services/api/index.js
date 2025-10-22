@@ -1,4 +1,4 @@
-const apiUrl = "http://192.168.1.15:3000"
+const apiUrl = "http://192.168.20.119:3000"
 
 export const fetchMarkers = async () => {
     try{
@@ -72,19 +72,25 @@ export const fetchSpeciesByFilter = async (filterId) => {
 export const submitNewMarket = async (dataMarket) => {
   try {
     const formData = new FormData();
-
+    var image
     formData.append('name', dataMarket.name);
     formData.append('description', dataMarket.description);
     formData.append('category', dataMarket.category);
     formData.append('latitude', String(dataMarket.latitude));
     formData.append('longitude', String(dataMarket.longitude)); 
+    formData.append('listCuriousThings', dataMarket.listCuriousThings);
 
-    const image = dataMarket.imageObject;
-    formData.append('image', {
+    if(!image){
+      image = null
+    }else{
+       image = dataMarket.imageObject;
+        formData.append('image', {
         uri: image.uri,
         name: image.fileName || 'photo.jpg',
         type: image.mimeType || 'image/jpeg', 
     });
+    }
+   
 
     const response = await fetch(apiUrl + "/markers/createMarket", {
       method: 'POST',

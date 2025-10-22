@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, StyleSheet, ScrollView, Dimensions } from "react-native";
+import { View, Image, StyleSheet, ScrollView, Dimensions,FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import {TextSize} from "../components/Text.js"
 
@@ -34,12 +34,26 @@ export const DetailsAnimal = ({ route }) => {
           </TextSize>
 
           <TextSize  style={styles.infoTitle}>Curiosidades</TextSize>
-          <TextSize style={styles.infoText}>
-            - Pueden detectar campos eléctricos de otros animales.{"\n"}
-            - Algunos tiburones pueden vivir más de 70 años.{"\n"}
-            - Tienen varias filas de dientes que se reemplazan continuamente.{"\n"}
-            - Son cruciales para la salud de los arrecifes de coral y ecosistemas marinos.
-          </TextSize>
+          {
+            animal.curiousThings.length != 0
+            ?
+              <FlatList
+                scrollEnabled={false}
+                style={{ marginTop: 30 }}
+                data={animal.curiousThings} 
+                renderItem={({ item }) => (
+                  <TextSize style={styles.infoText}>
+                    - {item}
+                  </TextSize>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+                contentContainerStyle={{ paddingBottom: 20 }}
+                showsVerticalScrollIndicator={false}
+              />
+            : null
+          }
+
+        
         </View>
         
       </ScrollView>
@@ -49,18 +63,18 @@ export const DetailsAnimal = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000", // para resaltar GIF y degradado
+    backgroundColor: "#000", 
   },
   sharkGif: {
     borderRadius: 20,
     width: width,
-    height: height * 0.45, // ocupa casi la mitad de la pantalla
+    height: height * 0.45, 
   },
   gradient: {
     position: "absolute",
     left: 0,
     right: 0,
-    top: height * 0.25, // comienza un poco abajo del top del GIF
+    top: height * 0.25,
     height: height * 0.2,
   },
   textOverlay: {
@@ -80,10 +94,10 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 20,
     padding: 20,
-    backgroundColor: "rgba(40, 117, 210,0.5)", // contraste con GIF
+    backgroundColor: "rgba(40, 117, 210,0.5)", 
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    marginTop: 5, // para superponer un poco sobre el GIF
+    marginTop: 5,
   },
   infoTitle: {
     fontSize: 24,
