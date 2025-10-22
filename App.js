@@ -5,13 +5,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from '@expo/vector-icons';
 import {StatusBar} from "react-native"
 import {Home} from "./app/screens/Home.js"
-import {DetailsAnimals} from "./app/screens/DetailsAnimals.js"
+import {DetailsAnimal} from "./app/screens/DetailsAnimal.js"
 import {CreateMark} from "././app/screens/CreateMark.js"
 import {Species} from "./app/screens/Species.js"
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 //screenOptions={{ headerShown: false }}
+
 const Tabs = () => {
   return  (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
@@ -21,14 +22,6 @@ const Tabs = () => {
             <Ionicons name="alert-circle-outline" color={color} size={size} />
           ),
           title: "Mapa"
-        }}
-      />
-      <Tab.Screen name="DetailsAnimals" component={DetailsAnimals} 
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="alert-circle-outline" color={color} size={size} />
-          ),
-          title: "Detalles Animales"
         }}
       />
       <Tab.Screen name="CreateMark" component={CreateMark} 
@@ -58,7 +51,8 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Tabs" component={Tabs} />
-          </Stack.Navigator>
+          <Stack.Screen name="DetailsAnimal" component={DetailsAnimal} />
+        </Stack.Navigator>
       </NavigationContainer>
     </>
     

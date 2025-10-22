@@ -5,7 +5,9 @@ import {TextSize} from "../components/Text.js"
 
 const { width, height } = Dimensions.get("window");
 
-export const DetailsAnimals = () => {
+export const DetailsAnimal = ({ route }) => {
+  const { animal } = route.params;
+  console.log("DetailsAnimal received animal:", animal);
   return (
       <ScrollView style={styles.container}>
             {/* GIF del tiburón */}
@@ -23,17 +25,12 @@ export const DetailsAnimals = () => {
 
         {/* Texto con efecto de brillo */}
         <View style={styles.textOverlay}>
-          <TextSize style={styles.glowText}>Tiburón</TextSize>
+          <TextSize style={styles.glowText}>{animal.name}</TextSize>
         </View>
         <View style = {styles.infoContainer}>
-          <TextSize style={styles.infoTitle}>Sobre el tiburón</TextSize>
+          <TextSize style={styles.infoTitle}>Descripción</TextSize>
           <TextSize style={styles.infoText}>
-            Los tiburones son un grupo de peces cartilaginosos conocidos por su
-            aguda visión, sentidos desarrollados y su papel como depredadores
-            ápice en los ecosistemas marinos. Hay más de 500 especies, que varían
-            en tamaño desde los pequeños tiburones linterna hasta el enorme tiburón
-            ballena. Son fundamentales para mantener el equilibrio de los océanos,
-            regulando las poblaciones de otras especies.
+            {animal.description}
           </TextSize>
 
           <TextSize  style={styles.infoTitle}>Curiosidades</TextSize>

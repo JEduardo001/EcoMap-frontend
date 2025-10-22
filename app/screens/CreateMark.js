@@ -7,12 +7,13 @@ import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import MapView, { Marker } from 'react-native-maps';
 import { addUser } from "../services/TestFirestore.js";
-import  {submitNewMarket, submitImage} from "../services/api/index.js"
+import  {submitNewMarket } from "../services/api/index.js"
+import {filters} from "../constants/Filters.js"
 
 export const CreateMark = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("fauna");
+  const [category, setCategory] = useState(filters[0].id);
   const [image, setImage] = useState(null);
   const [imageObject, setImageObject] = useState(null);
 
@@ -55,8 +56,8 @@ export const CreateMark = () => {
 
   const handleSubmit = async () => {
 
-    if (!name || !description || !latitude || !longitude) {
-      visibleModal("Error", "Todos los campos son obligatorios");
+    if (!name || !description || !latitude || !longitude || !imageObject) {
+      visibleModal("Falta información", "Porfavor completa todos los campos requeridos");
       return;
     }
     
@@ -87,6 +88,7 @@ export const CreateMark = () => {
         <Text style={styles.header}>Agregar Nuevo Animal</Text>
 
         <Text style={styles.label}>Imagen</Text>
+        <Text style={[styles.label, {color: "red", fontSize: 12}]}>Requerido</Text>
         <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
           {image ? (
             <Image source={{ uri: image }} style={styles.previewImage} />
@@ -96,6 +98,7 @@ export const CreateMark = () => {
         </TouchableOpacity>
 
         <Text style={styles.label}>Nombre</Text>
+        <Text style={[styles.label, {color: "red", fontSize: 12}]}>Requerido</Text>
         <TextInput
           style={styles.input}
           placeholder="Nombre del animal"
@@ -105,6 +108,7 @@ export const CreateMark = () => {
         />
 
         <Text style={styles.label}>Descripción</Text>
+        <Text style={[styles.label, {color: "red", fontSize: 12}]}>Requerido</Text>
         <TextInput
           style={[styles.input, { height: 100 }]}
           placeholder="Descripción"
@@ -115,14 +119,20 @@ export const CreateMark = () => {
         />
 
         <Text style={styles.label}>Categoría</Text>
+        <Text style={[styles.label, {color: "red", fontSize: 12}]}>Requerido</Text>
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={category}
             onValueChange={(itemValue) => setCategory(itemValue)}
             style={styles.picker}
           >
-            <Picker.Item label="Fauna" value="VX8DsEiLXS1AtX6wpgkw" />
-            <Picker.Item label="Flora" value="2mvFSZ9mN0vzy4BrRgkT" />
+           
+            {filters.map((filter) => {
+              return (   <Picker.Item
+                label={`${filter.name}`}
+                value={filter.id}
+              />)
+            })}
           </Picker>
         </View>
 

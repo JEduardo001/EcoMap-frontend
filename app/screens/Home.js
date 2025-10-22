@@ -5,6 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { animals } from "../constants/Animals.js";
 import {fetchMarkers,fetchMarkersByFilter} from "../services/api/index.js"
 import { filters } from "../constants/Filters.js";
+import { useNavigation } from '@react-navigation/native';
 
 export const Home = () => {
   const [sizeMarker, setSizeMarker] = useState(0.1);
@@ -13,6 +14,15 @@ export const Home = () => {
   const [selectedAnimal, setSelectedAnimal] = useState(null);
   const [markers,setMarkers] = useState([])
   const [filter,setFilter] = useState(null)
+  const navigation = useNavigation();
+  
+  
+ const navigateToDetailsAnimal = () => {
+  console.log("Navigating to DetailsAnimal for:", selectedAnimal);
+    navigation.navigate('DetailsAnimal', { animal: selectedAnimal });
+  };
+
+  
 
   useEffect(() => {
     getMarkers()
@@ -70,15 +80,16 @@ export const Home = () => {
         mapType="satellite"
       >
         {markers.map((marker) => (
-          <Marker
-            key={marker.animal.name}
-            coordinate={marker.coordinate}
-            onPress={() => handleMarkerPress(marker.animal)}
-            image={require('../../assets/ballenaJorobada.png')}
-            style={{backgroundColor: 'red', width: 700, height: 700, padding: 0, margin: 0}}
-          >
-            
-          </Marker>
+         <Marker
+          key={marker.animal.name}
+          coordinate={marker.coordinate}
+          onPress={() => handleMarkerPress(marker.animal)}
+        >
+          <Image
+            source={{ uri: marker.animal.urlImage }} 
+            style={{ width: 50 , height: 50  }}
+          />
+        </Marker>
         ))}
       </MapView>
 
@@ -147,20 +158,12 @@ export const Home = () => {
               <Text style={styles.animalDescription}>
                 {selectedAnimal?.description || 'Descripción no disponible'}
               </Text>
-              <View style={styles.coordinatesContainer}>
-                <View style={styles.coordinateItem}>
-                  <MaterialIcons name="my-location" size={18} color="#4CAF50" />
-                  <Text style={styles.coordinateText}>
-                    Latitud: {selectedAnimal?.coordinate?.latitude?.toFixed(4) || 'N/A'}
-                  </Text>
-                </View>
-                <View style={styles.coordinateItem}>
-                  <MaterialIcons name="my-location" size={18} color="#4CAF50" />
-                  <Text style={styles.coordinateText}>
-                    Longitud: {selectedAnimal?.coordinate?.longitude?.toFixed(4) || 'N/A'}
-                  </Text>
-                </View>
-              </View>
+                <TouchableOpacity
+                onPress={() => navigateToDetailsAnimal()}
+                style={styles.btnGoToDetailsAnimal}
+              >
+                <Text styele = {styles.btnGoToDetailsAnimalText}>Conocer más detalles</Text>
+              </TouchableOpacity>
             </View>
           </TouchableOpacity>
         </TouchableOpacity>
@@ -186,6 +189,26 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: "center",
   },
+ btnGoToDetailsAnimal: {
+  backgroundColor: '#4CAF50',
+  paddingVertical: 12,
+  paddingHorizontal: 25,
+  borderRadius: 25,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+  elevation: 5,
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+btnGoToDetailsAnimalText: {
+  color: '#fff',
+  fontSize: 16,
+  fontWeight: '600',
+  textTransform: 'uppercase',
+},
+
   btnSelectInfo: {
     position: "absolute",
     top: '10%',
@@ -281,15 +304,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#e0e0e0',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: 'red',
   },
   animalImage: {
     width: 350,
     height: 350,
     borderRadius: 10,
-    borderWidth: 3,
-    borderColor: 'blue',
+  
   },
   infoContainer: { padding: 20 },
   animalDescription: { fontSize: 16, color: '#333', textAlign: 'center', marginBottom: 20, lineHeight: 24 },

@@ -13,14 +13,21 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import {fetchSpecies,fetchSpeciesByFilter} from "../services/api/index.js"
 import {filters} from "../constants/Filters.js"
+import { useNavigation } from '@react-navigation/native';
 
 const screenWidth = Dimensions.get('window').width;
 
 export const Species = () => {
+  const navigation = useNavigation();
   const [species,setSpecies] = useState([])
   const [filter,setFilter] = useState(null)
 
-    const getSpeciesByFilters = async () => {
+  const navigateToDetailsAnimal = (animal) => {
+    navigation.navigate('DetailsAnimal', { animal });
+  };
+
+
+  const getSpeciesByFilters = async () => {
       if(!filter){
         getSpecies()
         return
@@ -48,19 +55,21 @@ export const Species = () => {
     }
     setSpecies(response.data)
   }
-
+  //source={require('../../assets/turtle.png')}
   const renderCard = ({ item }) => (
-  <TouchableOpacity style={styles.card}>
+  <TouchableOpacity style={styles.card} onPress={() => navigateToDetailsAnimal(item)}>
     <ImageBackground 
-      source={require('../../assets/turtleBack.png')}
+      source={{ uri: item.urlImage }} 
       style={styles.backgroundImageCard}
       resizeMode="cover"
-    >
+    >   
       <View style={styles.overlay} />
-      <Image source={require('../../assets/turtle.png')} style={styles.image} />
+    {/* 
+  <Image source={{ uri: item.urlImage }} style={styles.image} /> 
+  */}
       <View style={styles.infoContainer}>
         <Text style={styles.title}>{item.name}</Text>
-        <Text style={styles.subtitle}>{item.typeLife.name}</Text>
+        <Text style={styles.subtitle}>{item.category.name}</Text>
         <MaterialIcons name="info-outline" size={24} color="#4CAF50" />
       </View>
     </ImageBackground>
