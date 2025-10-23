@@ -8,6 +8,8 @@ import {Home} from "./app/screens/Home.js"
 import {DetailsAnimal} from "./app/screens/DetailsAnimal.js"
 import {CreateMark} from "././app/screens/CreateMark.js"
 import {Species} from "./app/screens/Species.js"
+import {WorldSpecies} from "./app/screens/WorldSpecies.js"
+import {Profile} from "./app/screens/Profile.js"
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -19,7 +21,7 @@ const Tabs = () => {
        <Tab.Screen name="Home" component={Home}  
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="alert-circle-outline" color={color} size={size} />
+            <Ionicons name="map-outline" color={color} size={size} />
           ),
           title: "Mapa"
         }}
@@ -27,7 +29,7 @@ const Tabs = () => {
       <Tab.Screen name="CreateMark" component={CreateMark} 
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="alert-circle-outline" color={color} size={size} />
+            <Ionicons name="add-circle-outline" color={color} size={size} />
           ),
           title: "Crear Marcador"
         }}
@@ -35,9 +37,25 @@ const Tabs = () => {
        <Tab.Screen name="Species" component={Species} 
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="alert-circle-outline" color={color} size={size} />
+            <Ionicons name="search-outline" color={color} size={size} />
           ),
           title: "Conoce las Especies"
+        }}
+      />
+       <Tab.Screen name="Especies Mundiales" component={WorldSpecies} 
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="earth-outline" color={color} size={size} />
+          ),
+          title: "Especies Increíbles"
+        }}
+      />
+       <Tab.Screen name="Profile" component={Profile} 
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person-outline" color={color} size={size} />
+          ),
+          title: "Mis Datos"
         }}
       />
     </Tab.Navigator>

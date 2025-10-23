@@ -18,11 +18,9 @@ export const Home = () => {
 
   
  const navigateToDetailsAnimal = () => {
-  console.log("Navigating to DetailsAnimal for:", selectedAnimal);
+    setModalVisible(false);
     navigation.navigate('DetailsAnimal', { animal: selectedAnimal });
   };
-
-  
 
   useEffect(() => {
     getMarkers()
@@ -41,7 +39,6 @@ export const Home = () => {
     if(response.status != 200){
       console.error("Error fetching markers by filter")
     }
-    console.log("Markers fetched by filter:", response)
     setMarkers(response.data)
   }
 

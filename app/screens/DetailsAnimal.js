@@ -1,18 +1,33 @@
 import React from "react";
-import { View, Image, StyleSheet, ScrollView, Dimensions,FlatList } from "react-native";
+import { View, StyleSheet, ScrollView, Dimensions,FlatList,TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import {TextSize} from "../components/Text.js"
+import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 
 const { width, height } = Dimensions.get("window");
 
 export const DetailsAnimal = ({ route }) => {
   const { animal } = route.params;
-  console.log("DetailsAnimal received animal:", animal);
+
+  const getImage = (animal) => {
+    if(animal.urlGift == "" || animal.urlGift == null){
+      if(animal.urlImage == "" || animal.urlImage == null){
+          return require('../../assets/imageNotFound.jpg')
+        }
+        return { uri: animal.urlImage
+      }
+    }
+    return  { uri: animal.urlGift }
+  }
+
   return (
       <ScrollView style={styles.container}>
-            {/* GIF del tiburón */}
+
         <Image
-          source={require("../../assets/tiburonGift1.gif")}
+          source={
+              getImage(animal)
+            }
           style={styles.sharkGif}
           resizeMode="cover"
         />
@@ -28,12 +43,34 @@ export const DetailsAnimal = ({ route }) => {
           <TextSize style={styles.glowText}>{animal.name}</TextSize>
         </View>
         <View style = {styles.infoContainer}>
-          <TextSize style={styles.infoTitle}>Descripción</TextSize>
+          <View style ={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
+            <TextSize style={styles.infoTitle}>Descripción</TextSize>
+            <View style ={styles.containerIconsAdditional}>
+              
+              <TouchableOpacity style={[styles.button, styles.favoriteButton]}>
+                <Ionicons name="star" size={28} color="yellow" />
+              </TouchableOpacity>
+
+              <TouchableOpacity style={[styles.button, styles.likeButton]}>
+                <Ionicons name="heart" size={28} color="red" />
+              </TouchableOpacity>
+
+              <TouchableOpacity style={[styles.button, styles.learnButton]}>
+                <Ionicons name="book" size={28} color="green" />
+              </TouchableOpacity>
+
+            </View>
+
+          </View>
           <TextSize style={styles.infoText}>
             {animal.description}
           </TextSize>
 
-          <TextSize  style={styles.infoTitle}>Curiosidades</TextSize>
+            <View style ={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
+             <Ionicons name="bulb-outline" size={28} color="yellow" />
+              <TextSize  style={styles.infoTitle}>Curiosidades</TextSize>
+            </View>
+         
           {
             animal.curiousThings.length != 0
             ?
@@ -64,6 +101,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#000", 
+  },
+  containerIconsAdditional: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 10,
+    width: "40%",
+    position: "absolute",
+    right: 0
   },
   sharkGif: {
     borderRadius: 20,
@@ -110,5 +156,27 @@ const styles = StyleSheet.create({
     color: "#ddd",
     lineHeight: 24,
     marginBottom: 20,
+  },
+  button: {
+    width: 40,
+    height: 40,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#8b8b8bff',
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 4,
+  },
+  favoriteButton: {
+    backgroundColor: '#bdcf13ff',
+    
+  },
+  likeButton: {
+    backgroundColor: '#ffa4a4ff',
+  },
+  learnButton: {
+    backgroundColor: '#9cf8ffff',
+  
   },
 });

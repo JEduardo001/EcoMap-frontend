@@ -36,7 +36,6 @@ export const Species = () => {
       if(response.status != 200){
         console.error("Error fetching species by filter")
       }
-      console.log("Species fetched by filter:", response)
       setSpecies(response.data)
     }
 
@@ -88,48 +87,47 @@ export const Species = () => {
       style={styles.background}
       resizeMode="cover"
     >
-      {/* Capa de color encima de la imagen */}
       <View style={styles.colorOverlay} />
 
       {/* Contenido */}
       <View style={styles.content}>
         <Text style={styles.header}>Especies destacadas</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ alignItems: 'center', paddingHorizontal: 10 }}
-        style={{ maxHeight: 100, padding: 7 }}
-        >
-        <TouchableOpacity
-            style={styles.containerSectionInfo}
-            onPress={() => setFilter(null)}
-        >
-            <MaterialIcons name="edit" size={24} color="#ffd700" />
-            <Text style={styles.sectionText}>Quitar Filtros</Text>
-        </TouchableOpacity>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ alignItems: 'center', paddingHorizontal: 10 }}
+          style={{ maxHeight: 50, padding: 7 }}
+          >
+          <TouchableOpacity
+              style={styles.containerSectionInfo}
+              onPress={() => setFilter(null)}
+          >
+              <MaterialIcons name="edit" size={24} color="#ffd700" />
+              <Text style={styles.sectionText}>Quitar Filtros</Text>
+          </TouchableOpacity>
 
-        {filters.map((filter) => (
-            <TouchableOpacity
-            key={filter.id}
-            style={styles.containerSectionInfo}
-            onPress={() => setFilter(filter.id)}
-            >
-            <MaterialIcons name="edit" size={24} color="#ffd700" />
-            <Text style={styles.sectionText}>Mostrar {filter.name}</Text>
-            </TouchableOpacity>
-        ))}
+          {filters.map((filter) => (
+              <TouchableOpacity
+              key={filter.id}
+              style={styles.containerSectionInfo}
+              onPress={() => setFilter(filter.id)}
+              >
+              <MaterialIcons name="edit" size={24} color="#ffd700" />
+              <Text style={styles.sectionText}>Mostrar {filter.name}</Text>
+              </TouchableOpacity>
+          ))}
         </ScrollView>
 
 
         
         {
             species.length === 0 ? 
-                <View>
-                    <Text style={{color: '#fff'}}>No hay especies</Text>
+                <View  style={{marginTop: 30, flex: 1,  alignItems: 'center'}}>
+                    <Text style={{color: '#fff', fontWeight: '700',fontSize: 20}}>No hay especies</Text>
                 </View>
             :
              <FlatList
-                style={{marginTop: 30}}
+                style={{marginTop: 30,flex: 1, }}
                 data={species}
                 renderItem={renderCard}
                 keyExtractor={(item) => item.id}
@@ -160,7 +158,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: '700',
-    marginBottom: 20,
+    marginBottom: 10,
     color: '#ffffff',
   },
   card: {

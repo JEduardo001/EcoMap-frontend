@@ -43,9 +43,7 @@ export const CreateMark = () => {
 
     if (!result.canceled) {
       const image = result.assets[0];
-
       setImage(image.uri);
-
       setImageObject(image);
     }
   };
@@ -75,12 +73,12 @@ export const CreateMark = () => {
     if(sendingCreateMark){
       return
     }
-    setSendingCreateMark(true)
     if (!name || !description || !latitude || !longitude) {
       visibleModal("Falta información", "Porfavor completa todos los campos requeridos");
       return;
     }
-    
+    setSendingCreateMark(true)
+
     const newMark = { name, description, category, imageObject, latitude, longitude, listCuriousThings };
     const responseSumitMarket = await submitNewMarket(newMark)
     if(responseSumitMarket.status != 200){
