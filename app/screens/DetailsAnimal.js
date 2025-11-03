@@ -45,7 +45,7 @@ export const DetailsAnimal = ({ route }) => {
         <View style = {styles.infoContainer}>
           <View style ={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
             <TextSize style={styles.infoTitle}>Descripción</TextSize>
-            <View style ={styles.containerIconsAdditional}>
+           {/*  <View style ={styles.containerIconsAdditional}>
               
               <TouchableOpacity style={[styles.button, styles.favoriteButton]}>
                 <Ionicons name="star" size={28} color="yellow" />
@@ -59,7 +59,7 @@ export const DetailsAnimal = ({ route }) => {
                 <Ionicons name="book" size={28} color="green" />
               </TouchableOpacity>
 
-            </View>
+            </View> */}
 
           </View>
           <TextSize style={styles.infoText}>

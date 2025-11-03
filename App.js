@@ -9,7 +9,7 @@ import {DetailsAnimal} from "./app/screens/DetailsAnimal.js"
 import {CreateMark} from "././app/screens/CreateMark.js"
 import {Species} from "./app/screens/Species.js"
 import {WorldSpecies} from "./app/screens/WorldSpecies.js"
-import {Profile} from "./app/screens/Profile.js"
+//import {Profile} from "./app/screens/Profile.js"
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -50,14 +50,14 @@ const Tabs = () => {
           title: "Especies Increíbles"
         }}
       />
-       <Tab.Screen name="Profile" component={Profile} 
+      {/*  <Tab.Screen name="Profile" component={Profile} 
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" color={color} size={size} />
           ),
           title: "Mis Datos"
         }}
-      />
+      /> */}
     </Tab.Navigator>
   )
 }

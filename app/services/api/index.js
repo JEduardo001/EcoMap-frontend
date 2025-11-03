@@ -1,4 +1,4 @@
-const apiUrl = "http://192.168.1.15:3000"
+const apiUrl = "http://192.168.1.20:3000"
 
 export const fetchMarkers = async () => {
     try{

@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { StyleSheet, View, Image, TouchableOpacity, Text, Modal } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity,ScrollView, Text, Modal } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import { MaterialIcons } from '@expo/vector-icons';
 import { animals } from "../constants/Animals.js";
@@ -59,8 +59,8 @@ export const Home = () => {
   const region = {
     latitude: 24.1314817,
     longitude: -110.3250219,
-    latitudeDelta: 0.005,
-    longitudeDelta: 0.005,
+    latitudeDelta: 2.005,
+    longitudeDelta: 2.005,
   };
 
   return (
@@ -90,14 +90,23 @@ export const Home = () => {
               style={{ width: 50 , height: 50  }}
             />
             :
-            <Image
-              source={{ uri: marker.animal.urlImage }} 
-              style={{ width: 50 , height: 50  }}
-            />
+      <Image
+              source={{ uri: marker.animal.urlImage }}
+              style={{ width: 35, height: 35,borderRadius: 10, borderWidth: 2, borderColor: "rgba(86, 231, 130, 1)"  }}
+            /> 
+
+
           }
         </Marker>
         ))}
       </MapView>
+
+      <TouchableOpacity
+        style={[styles.btnSelectInfo, {left: "25%"}]}
+        onPress={() => getMarkers()}
+      >
+        <MaterialIcons name="autorenew" size={30} color="black" />
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.btnSelectInfo}
@@ -152,34 +161,35 @@ export const Home = () => {
               </TouchableOpacity>
             </View>
 
-            <View style={styles.imageContainer}>
-                {
-                  selectedAnimal != null
-                  ?
-                    <Image
-                      source={
-                        selectedAnimal.urlImage === "" || selectedAnimal.urlImage == null
-                          ? require('../../assets/imageNotFound.jpg')
-                          : { uri: selectedAnimal.urlImage }
-                      }
-                      style={styles.animalImage}
-                      
-                    />
-                  : null
-                }
-            </View>
+           
+                <View style={styles.imageContainer}>
+                  {
+                    selectedAnimal != null
+                    ?
+                      <Image
+                        source={
+                          selectedAnimal.urlImage === "" || selectedAnimal.urlImage == null
+                            ? require('../../assets/imageNotFound.jpg')
+                            : { uri: selectedAnimal.urlImage }
+                        }
+                        style={styles.animalImage}
+                        
+                      />
+                    : null
+                  }
+              </View>
 
-            <View style={styles.infoContainer}>
-              <Text style={styles.animalDescription}>
-                {selectedAnimal?.description || 'Descripción no disponible'}
-              </Text>
-                <TouchableOpacity
-                onPress={() => navigateToDetailsAnimal()}
-                style={styles.btnGoToDetailsAnimal}
-              >
-                <Text styele = {styles.btnGoToDetailsAnimalText}>Conocer más detalles</Text>
-              </TouchableOpacity>
-            </View>
+              <View style={styles.infoContainer}>
+                <Text style={styles.animalDescription}>
+                  {selectedAnimal?.name || 'Nombre no disponible'}
+                </Text>
+                  <TouchableOpacity
+                  onPress={() => navigateToDetailsAnimal()}
+                  style={styles.btnGoToDetailsAnimal}
+                >
+                  <Text style= {styles.btnGoToDetailsAnimalText}>Conocer más detalles</Text>
+                </TouchableOpacity>
+              </View> 
           </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
@@ -222,6 +232,13 @@ btnGoToDetailsAnimalText: {
   fontSize: 16,
   fontWeight: '600',
   textTransform: 'uppercase',
+},
+viewImage:{
+  width: 150,
+  height: 150,
+  backgroundColor: "rgba(95, 211, 166, 1)",
+  padding: 7,
+  borderRadius: 15
 },
 
   btnSelectInfo: {
@@ -286,7 +303,7 @@ btnGoToDetailsAnimalText: {
     alignItems: 'center',
   },
   modalContainer: {
-    backgroundColor: 'white',
+   
     borderRadius: 15,
     width: '85%',
     maxHeight: '85%',
@@ -315,7 +332,7 @@ btnGoToDetailsAnimalText: {
   closeBtn: { padding: 5 },
   imageContainer: {
     width: '100%',
-    height: 400,
+    height: "50%",
     backgroundColor: '#e0e0e0',
     justifyContent: 'center',
     alignItems: 'center',
@@ -327,7 +344,7 @@ btnGoToDetailsAnimalText: {
   
   },
   infoContainer: { padding: 20 },
-  animalDescription: { fontSize: 16, color: '#333', textAlign: 'center', marginBottom: 20, lineHeight: 24 },
+  animalDescription: { fontSize: 19, color: '#ffffffff', textAlign: 'center', marginBottom: 20, lineHeight: 24 },
   coordinatesContainer: { backgroundColor: '#f0f8f0', borderRadius: 10, padding: 15 },
   coordinateItem: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
   coordinateText: { marginLeft: 10, fontSize: 14, color: '#555' },

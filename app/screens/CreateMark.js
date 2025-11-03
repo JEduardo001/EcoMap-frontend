@@ -82,6 +82,7 @@ export const CreateMark = () => {
     const newMark = { name, description, category, imageObject, latitude, longitude, listCuriousThings };
     const responseSumitMarket = await submitNewMarket(newMark)
     if(responseSumitMarket.status != 200){
+      setSendingCreateMark(false)
       visibleModal("Ocurrió un problema", "No se pudo agregar el animal, intenta nuevamente");
       return
     }
@@ -94,7 +95,7 @@ export const CreateMark = () => {
   const resetForm = () => {
     setName(""); 
     setDescription(""); 
-    setCategory("fauna"); 
+    setCategory(filters[0].id); 
     setImage(null); 
     setLatitude(24.14231); 
     setLongitude(-110.31316);

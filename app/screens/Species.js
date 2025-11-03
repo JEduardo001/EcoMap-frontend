@@ -118,6 +118,12 @@ export const Species = () => {
           ))}
         </ScrollView>
 
+        <TouchableOpacity
+          style={[styles.btnReload, {left: "10%"}]}
+          onPress={() => getSpecies()}
+        >
+          <MaterialIcons name="autorenew" size={30} color="black" />
+        </TouchableOpacity>
 
         
         {
@@ -160,6 +166,21 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: 10,
     color: '#ffffff',
+  },
+  btnReload: {
+    width: 50,
+    height: 50,
+    top: 10,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
   },
   card: {
     backgroundColor: 'rgba(0, 0, 0, 0.43)',
