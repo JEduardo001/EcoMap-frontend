@@ -1,4 +1,4 @@
-const apiUrl = "http://192.168.1.20:3000"
+const apiUrl = "https://eco-map-backend.vercel.app"
 
 export const fetchMarkers = async () => {
     try{

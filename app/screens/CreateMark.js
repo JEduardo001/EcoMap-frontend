@@ -6,7 +6,6 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import MapView, { Marker } from 'react-native-maps';
-import { addUser } from "../services/TestFirestore.js";
 import  {submitNewMarket } from "../services/api/index.js"
 import {filters} from "../constants/Filters.js"
 

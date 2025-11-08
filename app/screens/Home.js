@@ -14,6 +14,8 @@ export const Home = () => {
   const [selectedAnimal, setSelectedAnimal] = useState(null);
   const [markers,setMarkers] = useState([])
   const [filter,setFilter] = useState(null)
+  const [showModalInfoData,setShowModalInfoData] = useState(false)
+
   const navigation = useNavigation();
 
   
@@ -65,7 +67,7 @@ export const Home = () => {
 
   return (
     <View style={styles.container}>
-      <MapView
+      <MapView  
         style={styles.map}
         region={region}
         onRegionChangeComplete={(r) => setSizeMarker(r.longitudeDelta  )}
@@ -80,14 +82,17 @@ export const Home = () => {
          <Marker
           key={marker.animal.name}
           coordinate={marker.coordinate}
-          onPress={() => handleMarkerPress(marker.animal)}
+          onPress={() => {
+            handleMarkerPress(marker.animal),
+            console.log("marker id " + marker.id),
+            console.log("animal id" + marker.animal.id)}}
         >
           {
             marker.animal.urlImage === "" || marker.animal.urlImage == null 
             ?
              <Image
               source={require('../../assets/imageNotFound.jpg')}
-              style={{ width: 50 , height: 50  }}
+              style={{ width: 35, height: 35,borderRadius: 10, borderWidth: 2, borderColor: "rgba(146, 146, 146, 1)"  }}
             />
             :
       <Image
@@ -100,6 +105,13 @@ export const Home = () => {
         </Marker>
         ))}
       </MapView>
+
+      <TouchableOpacity
+        style={[styles.btnSelectInfo, {left: "45%"}]}
+        onPress={() => setShowModalInfoData(!showModalInfoData)}
+      >
+        <MaterialIcons name="info" size={30} color="black" />
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.btnSelectInfo, {left: "25%"}]}
@@ -135,6 +147,31 @@ export const Home = () => {
         </View>
       )}
 
+      {/* Modal show info */}
+
+       <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showModalInfoData}
+        onRequestClose={() => setShowModalInfoData(!showModalInfoData)}
+      >
+        
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setShowModalInfoData(!showModalInfoData)}
+        >
+           <TouchableOpacity
+            style={styles.modalContainerShowInfoData}
+            activeOpacity={1}
+            onPress={() => {}}
+          >
+             <Text>EcoMap es una app que muestra las especies de Baja California Sur en un mapa y comparte noticias sobre la naturaleza de todo el mundo.</Text>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
+      
+      {/* Modal show filters */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -301,6 +338,18 @@ viewImage:{
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+   modalContainerShowInfoData: {
+    padding: 20,
+    backgroundColor: 'rgba(255, 255, 255, 1)',
+    borderRadius: 15,
+    width: '85%',
+    maxHeight: '85%',
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
   },
   modalContainer: {
    
